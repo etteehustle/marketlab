@@ -109,8 +109,8 @@ class Handler(SimpleHTTPRequestHandler):
         else:self.send_error(404)
 
 if __name__=='__main__':
-    port=int(os.getenv('PORT','8765'));url=f'http://127.0.0.1:{port}'
-    server=ThreadingHTTPServer(('127.0.0.1',port),Handler);print(f'Market Lab: {url}\nCtrl+C to stop.',flush=True)
+    host=os.getenv('HOST','127.0.0.1');port=int(os.getenv('PORT','8765'));url=f'http://{host}:{port}'
+    server=ThreadingHTTPServer((host,port),Handler);print(f'Market Lab: {url}\nCtrl+C to stop.',flush=True)
     try:server.serve_forever()
     except KeyboardInterrupt:pass
     finally:server.server_close()

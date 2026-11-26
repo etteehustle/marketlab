@@ -11,6 +11,19 @@ Cần Python 3.10+ và kết nối Internet. Giải nén ZIP, mở terminal ở 
 
 Mở http://127.0.0.1:8765. Server chỉ nghe trên máy local. Dữ liệu tự cập nhật mỗi 15 phút khi mở trang; có thể bấm cập nhật thủ công (cache server 5 phút). Ctrl+C để tắt.
 
+## Deploy lên Render
+
+Repo có sẵn `render.yaml` và `Dockerfile`, không cần API key cho dữ liệu thị trường.
+
+1. Đưa các file cấu hình deploy lên GitHub.
+2. Trong Render Dashboard chọn **New → Blueprint**, kết nối repo này và chọn nhánh có các file deploy.
+3. Kiểm tra service `marketlab` dùng Docker, gói Free, rồi tạo Blueprint.
+4. Khi deploy hoàn tất, mở URL HTTPS Render cấp. Kiểm tra trang chính và `/api/live`; trường `date` trong từng factor cho biết nguồn có dữ liệu hay không. HTTP 200 không đảm bảo tất cả nguồn hoạt động.
+
+Gói Free có thể ngủ khi không có truy cập. Backend cần truy cập HTTPS tới `fred.stlouisfed.org` và `farside.co.uk`; các nguồn có thể từ chối hoặc giới hạn truy cập.
+
+Chạy thử container: `docker build -t marketlab .`, sau đó `docker run --rm -p 8765:8765 marketlab`. Render tự truyền `PORT`; app đọc `HOST` để bind ra ngoài container. Khi chạy trực tiếp bằng Python, mặc định vẫn chỉ nghe trên localhost. Render cung cấp HTTPS phía trước server Python của MVP.
+
 ## Dữ liệu và giới hạn
 - CPI: FRED CPIAUCSL, YoY tính từ chỉ số đã điều chỉnh mùa vụ; thiếu consensus nên không tính tín hiệu live cho CPI. Chọn scenario thủ công để đánh giá surprise.
 - Fed Rate: FRED DFEDTARU (trần mục tiêu); thay đổi 30 ngày.

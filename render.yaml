@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: marketlab
+    runtime: docker
+    branch: codex/deploy-render
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
